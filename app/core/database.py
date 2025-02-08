@@ -1,19 +1,36 @@
-# backend/app/core/database.py
 from motor.motor_asyncio import AsyncIOMotorClient
-from app.core.config import settings
+import os
+import certifi  # ✅ מוסיף תמיכה בתעודות SSL תקינות
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Database:
-    client: AsyncIOMotorClient = None
-    db = None
+    _client = None
+    _db = None
 
-    @staticmethod
-    async def connect():
-        Database.client = AsyncIOMotorClient(settings.MONGODB_URL)
-        Database.db = Database.client.get_database("task_manager")
-        print("✅ Connected to MongoDB")
+    @classmethod
+    async def connect(cls):
+        """Connect to MongoDB using SSL certificate verification."""
+        if cls._client is None:
+            cls._client = AsyncIOMotorClient(
+                os.getenv("MONGO_URI"), tlsCAFile=certifi.where()  # ✅ תמיכה מלאה ב-SSL
+            )
+            cls._db = cls._client["task_manager"]
+            print("✅ Connected to MongoDB")
 
-    @staticmethod
-    async def disconnect():
-        if Database.client:
-            Database.client.close()
-            print("❌ Disconnected from MongoDB")
+    @classmethod
+    async def disconnect(cls):
+        """Disconnect from MongoDB"""
+        if cls._client:
+            cls._client.close()
+            cls._client = None
+            cls._db = None
+            print("✅ Disconnected from MongoDB")
+
+    @classmethod
+    def get_database(cls):
+        """Returns the database instance"""
+        if cls._db is None:
+            raise RuntimeError("❌ Database is not connected! Call `await Database.connect()` first.")
+        return cls._db
