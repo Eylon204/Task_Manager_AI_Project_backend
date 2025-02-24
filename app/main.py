@@ -1,5 +1,9 @@
 from fastapi import FastAPI
+<<<<<<< HEAD
 from app.routes import user, task, calendar, ai, event
+=======
+from app.routes import user, task, calendar, ai, event, auth
+>>>>>>> 07eae6ae (Added new backend files and updated repository)
 from app.core.database import Database
 
 app = FastAPI(title="Task Manager AI", version="1.0")
@@ -14,6 +18,10 @@ async def shutdown_db():
     await Database.disconnect()  
 
 # The Routes:
+<<<<<<< HEAD
+=======
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+>>>>>>> 07eae6ae (Added new backend files and updated repository)
 app.include_router(user.router, prefix="/users", tags=["users"])
 app.include_router(task.router, prefix="/tasks", tags=["tasks"])
 app.include_router(event.router, prefix="/events", tags=["events"]) 
