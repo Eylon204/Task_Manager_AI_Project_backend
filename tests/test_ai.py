@@ -1,4 +1,3 @@
-import pytest
 import torch
 from app.ai.opitmizer import TaskDurationNN, train_task_duration_nn
 from app.models.task import TaskInDB
