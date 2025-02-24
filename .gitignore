@@ -2,3 +2,5 @@ venv/
 *.dylib
 venv/
 *.dylib
+venv/
+__pycache__/
