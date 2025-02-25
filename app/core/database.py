@@ -1,10 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
-<<<<<<< HEAD
-import certifi  # ✅ מוסיף תמיכה בתעודות SSL תקינות
-=======
 import certifi 
->>>>>>> 07eae6ae (Added new backend files and updated repository)
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,11 +14,7 @@ class Database:
         """Connect to MongoDB using SSL certificate verification."""
         if cls._client is None:
             cls._client = AsyncIOMotorClient(
-<<<<<<< HEAD
                 os.getenv("MONGO_URI"), tlsCAFile=certifi.where()  # ✅ תמיכה מלאה ב-SSL
-=======
-                os.getenv("MONGO_URI"), tlsCAFile=certifi.where() 
->>>>>>> 07eae6ae (Added new backend files and updated repository)
             )
             cls._db = cls._client["task_manager"]
             print("✅ Connected to MongoDB")
