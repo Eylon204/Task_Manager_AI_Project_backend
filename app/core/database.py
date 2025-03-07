@@ -3,6 +3,7 @@ import os
 import certifi 
 from dotenv import load_dotenv
 
+# 🚀 טוען משתני סביבה מ- `.env`
 load_dotenv()
 
 class Database:
@@ -11,26 +12,28 @@ class Database:
 
     @classmethod
     async def connect(cls):
-        """Connect to MongoDB using SSL certificate verification."""
+        """📡 התחברות ל-MongoDB עם תמיכה ב-SSL."""
         if cls._client is None:
-            cls._client = AsyncIOMotorClient(
-                os.getenv("MONGO_URI"), tlsCAFile=certifi.where()  # ✅ תמיכה מלאה ב-SSL
-            )
+            mongo_uri = os.getenv("MONGO_URI")
+            if not mongo_uri:
+                raise RuntimeError("❌ MONGO_URI is not set in .env file!")
+
+            cls._client = AsyncIOMotorClient(mongo_uri, tlsCAFile=certifi.where())  # ✅ אבטחה מלאה
             cls._db = cls._client["task_manager"]
-            print("✅ Connected to MongoDB")
+            print("✅ Successfully connected to MongoDB")
 
     @classmethod
     async def disconnect(cls):
-        """Disconnect from MongoDB"""
+        """🔌 ניתוק ממסד הנתונים"""
         if cls._client:
             cls._client.close()
             cls._client = None
             cls._db = None
-            print("✅ Disconnected from MongoDB")
+            print("🔌 MongoDB connection closed")
 
     @classmethod
     def get_database(cls):
-        """Returns the database instance"""
+        """🔍 מחזיר את חיבור מסד הנתונים אם קיים"""
         if cls._db is None:
             raise RuntimeError("❌ Database is not connected! Call `await Database.connect()` first.")
         return cls._db

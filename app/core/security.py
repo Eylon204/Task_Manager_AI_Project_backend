@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 
-# Password hashing
+# יצירת קונטקסט הצפנה עם bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
@@ -18,7 +18,8 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify that a plain text password matches the hashed password."""
     return pwd_context.verify(plain_password, hashed_password)
 
-# JWT Token handling
+# יצירת טוקן JWT
+
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     """Generate a JWT token with expiration."""
     to_encode = data.copy()
@@ -27,7 +28,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encoded_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     return encoded_jwt
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     """Verify JWT token and return user."""

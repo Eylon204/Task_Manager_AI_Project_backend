@@ -18,12 +18,15 @@ def get_all_tasks(user_id: str) -> List[TaskInDB]:
     return [TaskInDB(**task) for task in tasks]
 
 def get_task_by_id(task_id: str) -> Optional[TaskInDB]:
-    """
-    Retrieves a specific task by its ID.
-    """
-    task = task_collection.find_one({"_id": ObjectId(task_id)})
+    """Retrieves a specific task by its ID."""
+    try:
+        task = task_collection.find_one({"_id": ObjectId(task_id)})
+    except Exception:
+        return None
+
     if task:
         return TaskInDB(**task)
+
     return None
 
 def create_task(task: TaskInDB) -> TaskInDB:

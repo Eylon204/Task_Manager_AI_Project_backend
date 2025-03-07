@@ -1,9 +1,5 @@
 from fastapi import FastAPI
-<<<<<<< HEAD
-from app.routes import user, task, calendar, ai, event
-=======
 from app.routes import user, task, calendar, ai, event, auth
->>>>>>> 07eae6ae (Added new backend files and updated repository)
 from app.core.database import Database
 
 app = FastAPI(title="Task Manager AI", version="1.0")
@@ -18,15 +14,23 @@ async def shutdown_db():
     await Database.disconnect()  
 
 # The Routes:
-<<<<<<< HEAD
-=======
-app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
->>>>>>> 07eae6ae (Added new backend files and updated repository)
-app.include_router(user.router, prefix="/users", tags=["users"])
-app.include_router(task.router, prefix="/tasks", tags=["tasks"])
-app.include_router(event.router, prefix="/events", tags=["events"]) 
-app.include_router(calendar.router, prefix="/calendar", tags=["calendar"])
-app.include_router(ai.router, prefix="/ai", tags=["AI"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(user.router, prefix="/api/users", tags=["users"])
+app.include_router(task.router, prefix="/api/tasks", tags=["tasks"])
+app.include_router(event.router, prefix="/api/events", tags=["events"]) 
+app.include_router(calendar.router, prefix="/api/calendar", tags=["calendar"])
+app.include_router(ai.router, prefix="/api/ai", tags=["AI"])
+
+from fastapi.middleware.cors import CORSMiddleware
+
+# 🛠️ הגדרת CORS - מתיר לכל המקורות, אם רוצים להקשיח אפשר להגדיר דומיינים ספציפיים
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ניתן להחליף ברשימת מקורות ספציפיים למשל ["http://localhost:4200"]
+    allow_credentials=True,
+    allow_methods=["*"],  # מתיר את כל סוגי הבקשות (כולל POST)
+    allow_headers=["*"],  # מתיר את כל הכותרות
+)
 
 @app.get("/")
 def read_root():
