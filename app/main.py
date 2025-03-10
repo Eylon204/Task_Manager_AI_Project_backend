@@ -23,13 +23,12 @@ app.include_router(ai.router, prefix="/api/ai", tags=["AI"])
 
 from fastapi.middleware.cors import CORSMiddleware
 
-# 🛠️ הגדרת CORS - מתיר לכל המקורות, אם רוצים להקשיח אפשר להגדיר דומיינים ספציפיים
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ניתן להחליף ברשימת מקורות ספציפיים למשל ["http://localhost:4200"]
+    allow_origins=["http://localhost:4200"],  # אפשר גישה ל-Frontend
     allow_credentials=True,
-    allow_methods=["*"],  # מתיר את כל סוגי הבקשות (כולל POST)
-    allow_headers=["*"],  # מתיר את כל הכותרות
+    allow_methods=["*"],  # אפשר את כל סוגי הבקשות (GET, POST, PUT, DELETE וכו')
+    allow_headers=["*"],  # אפשר את כל ה-Headers
 )
 
 @app.get("/")

@@ -1,7 +1,7 @@
 import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from app.models.task import TaskInDB
+from app.models.task_model import TaskInDB
 from typing import List
 from datetime import datetime, timedelta
 

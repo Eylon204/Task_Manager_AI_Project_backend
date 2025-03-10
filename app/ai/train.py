@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
-from app.models.task import TaskInDB
+from app.models.task_model import TaskInDB
 from app.ai.opitmizer import TaskDurationNN
 from typing import List
 

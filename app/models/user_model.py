@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 class UserBase(BaseModel):
@@ -18,4 +18,4 @@ class UserUpdate(BaseModel):
 
 class UserInDB(UserBase):
     """User model stored in the database."""
-    id: str
+    id: str = Field(..., alias="_id")  # המרת _id ל-id לשמירה על תאימות

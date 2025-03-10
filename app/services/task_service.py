@@ -2,7 +2,7 @@ from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
 from pymongo import MongoClient
-from app.models.task import TaskInDB
+from app.models.task_model import TaskInDB
 
 # Initialize MongoDB connection
 MONGO_URI = "mongodb://localhost:27017"

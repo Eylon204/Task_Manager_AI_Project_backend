@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.core.database import Database
 from app.core.security import verify_password, hash_password, create_access_token
-from app.models.user import UserCreate
+from app.models.user_model import UserCreate
 from bson import ObjectId
 
 router = APIRouter()
@@ -29,21 +29,23 @@ async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
     """Authenticate user and return JWT token."""
     db = Database.get_database()
 
-    print(f"📡 Login attempt for: {form_data.username}")  # הדפסת שם המשתמש שמתקבל
+    print(f"📡 Login attempt for: {form_data.username}")
 
     user = await db["users"].find_one({"email": form_data.username})
-    print(f"🔍 Found user: {user}")  # לוודא שהמשתמש נמצא
-
     if not user:
-        print("❌ User not found in database")
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     is_password_valid = verify_password(form_data.password, user["hashed_password"])
-    print(f"🔑 Password match: {is_password_valid}")  # האם הסיסמה תואמת?
-
     if not is_password_valid:
-        print("❌ Incorrect password")
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_access_token({"sub": user["email"]})
-    return {"access_token": token, "token_type": "bearer"}
+
+    # ✅ הוספת ה-ID למענה
+    return {
+        "access_token": token, 
+        "token_type": "bearer", 
+        "id": str(user["_id"]),  
+        "email": user["email"], 
+        "username": user.get("username", "Unknown")
+    }

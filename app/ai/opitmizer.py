@@ -1,5 +1,5 @@
 from typing import List
-from app.models.task import TaskInDB
+from app.models.task_model import TaskInDB
 from datetime import datetime, timedelta
 import numpy as np
 import torch
